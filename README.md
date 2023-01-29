@@ -1,8 +1,16 @@
 # GodaddyDDNS
+
+Introduction
+---
 A python script for dynamically updating a GoDaddy DNS record, when IP address changes.<br>
 用Py脚本实现自动更新DNS记录,监测本地IP变化。<br>
+
+Dependencies
+------------
+This program was written and tested using Python 3<br>
+
+Config
 ---
-## config
 Modify the following configuration：<br>
 只需要修改代码中的以下配置项：<br>
 你的域名：DOMAIN_NAME<br>
