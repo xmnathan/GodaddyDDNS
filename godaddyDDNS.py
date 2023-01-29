@@ -94,11 +94,11 @@ def update():
             rsp = urllib.request.urlopen(req, context=context)
             code = rsp.getcode()
             if code == 200:
-                print('成功更新域名解析：'+ip_addr)
+                print('成功更新域名解析：'+ip_addr+time.strftime("  AT  %Y-%m-%d %H:%M:%S", time.localtime()))
                 break
             else:
                 print('更新失败：'+code)
-
+                time.sleep(30)
         except Exception as e:
             print("update Exception:",e)
             time.sleep(30)
