@@ -23,8 +23,8 @@ head['Authorization'] = AuthorKey
 record_name = "{record name}"
 
 #########################################################################
-context = ssl._create_unverified_context()
-
+context = ssl._create_unverified_context()#跳过SSL验证
+old_IP = ""
 #获取当前IP
 def getIp():
     while True:
@@ -61,12 +61,16 @@ def update():
     global api_url
     global head
     global context
-
+    global old_IP
     #先取回原有的DNS记录，因为API的PUT接口会覆盖所有DNS记录
     records = retrieve()
 
     #获取当前IP
     ip_addr = getIp()
+    #IP没有变更则忽略
+    if old_IP == ip_addr:
+        print('IP无变化，无需提交更新'+ip_addr)
+        return
    
     # 官方的默认dns信息，如果不带上，会返回422错误
     records_NS01 = {
@@ -94,6 +98,7 @@ def update():
             rsp = urllib.request.urlopen(req, context=context)
             code = rsp.getcode()
             if code == 200:
+                old_IP = ip_addr#保存更新后的IP记录
                 print('成功更新域名解析：'+ip_addr+time.strftime("  AT  %Y-%m-%d %H:%M:%S", time.localtime()))
                 break
             else:
@@ -107,5 +112,5 @@ def update():
 if __name__ == "__main__":
     while True:
         update()
-        time.sleep(600)#十分钟执行一次
+        time.sleep(300)#五分钟检查一次
 
