@@ -23,5 +23,8 @@ DNS记录名：record_name<br>
 Documentations参考文档
 ---
 [Godaddy官方文档](https://developer.godaddy.com/doc/endpoint/domains "Domains API")
+
 [Fix Error# SSL: CERTIFICATE_VERIFY_FAILED](https://blog.csdn.net/huryer/article/details/122728478)
+
 <https://www.instructables.com/Quick-and-Dirty-Dynamic-DNS-Using-GoDaddy>
+
