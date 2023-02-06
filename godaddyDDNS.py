@@ -2,7 +2,7 @@ import urllib.request
 import json
 import time
 import ssl
-
+import random
 ################### Modify to your own information ###################
 #domain name 域名
 DOMAIN_NAME = '{your domain}'
@@ -25,20 +25,64 @@ record_name = "{record name}"
 #########################################################################
 context = ssl._create_unverified_context()#跳过SSL验证
 old_IP = ""
-#获取当前IP
+
+#获取当前IP ifconfig.me
+def getIp1():
+    try:
+        #获取当前ip
+        url = 'https://ifconfig.me/ip'
+        req = urllib.request.Request(url)
+        rsp=urllib.request.urlopen(req)
+        html=rsp.read().decode('utf-8',"ignore")
+        ip_addr=html.strip()
+        print("getIp1:",ip_addr)
+        return ip_addr
+    except Exception as e:
+        print("getIp1 Exception:",e)
+        return None
+
+#获取当前IP checkip.amazonaws.com
+def getIp2():
+    try:
+        #获取当前ip
+        url = 'https://checkip.amazonaws.com'
+        req = urllib.request.Request(url)
+        rsp=urllib.request.urlopen(req)
+        html=rsp.read().decode('utf-8',"ignore")
+        ip_addr=html.strip()
+
+        print("getIp2:",ip_addr)
+        return ip_addr
+    except Exception as e:
+        print("getIp2 Exception:",e)
+        return None
+
+#获取当前IP ipv4.icanhazip.com
+def getIp3():
+    try:
+        #获取当前ip
+        url = 'https://ipv4.icanhazip.com'
+        req = urllib.request.Request(url)
+        rsp=urllib.request.urlopen(req)
+        html=rsp.read().decode('utf-8',"ignore")
+        ip_addr=html.strip()
+
+        print("getIp3:",ip_addr)
+        return ip_addr
+    except Exception as e:
+        print("getIp3 Exception:",e)
+        return None
+
+#随机调用getIP站点，避免频繁调用被限流
+getIPList = [getIp1, getIp2, getIp3]
 def getIp():
     while True:
-        try:
-            #获取当前ip
-            url = 'https://ifconfig.me/ip'
-            req = urllib.request.Request(url)
-            rsp=urllib.request.urlopen(req)
-            html=rsp.read().decode('utf-8',"ignore")
-            ip_addr=html.strip()
+        funcGetIp = random.choice(getIPList)
+        ip_addr = funcGetIp()
+        if ip_addr == None:
+            time.sleep(30)   
+        else:
             return ip_addr
-        except Exception as e:
-            print("getIp Exception:",e)
-            time.sleep(30)
 
 #取回原有的DNS记录
 def retrieve():
