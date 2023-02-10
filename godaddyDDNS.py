@@ -106,8 +106,14 @@ def update():
     global head
     global context
     global old_IP
+
+    records = None
     #先取回原有的DNS记录，因为API的PUT接口会覆盖所有DNS记录
-    records = retrieve()
+    if old_IP == None or old_IP == "":
+        records = retrieve()
+        for rec in records:
+            if rec["name"] == record_name:
+                old_IP = rec["data"]
 
     #获取当前IP
     ip_addr = getIp()
@@ -115,7 +121,11 @@ def update():
     if old_IP == ip_addr:
         print('IP无变化，无需提交更新'+ip_addr)
         return
-   
+        
+    #上面如果取过就不取，降低查询频率
+    if records == None:
+        records = retrieve()
+
     # 官方的默认dns信息，如果不带上，会返回422错误
     records_NS01 = {
     "data" : "ns19.domaincontrol.com",
